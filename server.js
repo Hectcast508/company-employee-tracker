@@ -119,4 +119,35 @@ function addRole() {
   });
 };
 
+function addEmploy() {
+  db.query(`SELECT id AS value, title AS name FROM roles`, (err, roles) => {
+    if (err) console.log(err);
+    inquirer.prompt([
+      {
+        message: "Enter first name.",
+        name: "first_name"
+      },
+      {
+        message: "Enter last name.",
+        name: "last_name"
+      },
+      {
+        message: "Choose role",
+        type: "list",
+        name: "role",
+        choices: roles
+      },
+    ])
+    .then((answers) => {
+      db.query(`INSERT INTO employees (first_name, last_name, role_id) VALUES (?, ?, ?)`,
+      [answers.first_name, answers.last_name, answers.roles],
+      (err, results) => {
+        if (err) console.log(err);
+        console.log(answers);
+        promptHandler();
+      });
+    })
+  });
+}
+
 promptHandler();

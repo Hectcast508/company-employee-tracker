@@ -83,6 +83,7 @@ function addDep() {
     db.query(`INSERT INTO department (name) VALUES (?)`,
       [answers.name],
       (err, results) => {
+        console.log("Department Added");
         promptHandler();
       })
   });
@@ -112,7 +113,7 @@ function addRole() {
       [answers.title, answers.salary, answers.dep],
       (err, results) => {
         if (err) console.log(err);
-        console.log(answers);
+        console.log('Role Added');
         promptHandler();
       });
     })
@@ -143,7 +144,7 @@ function addEmploy() {
       [answers.first_name, answers.last_name, answers.roles],
       (err, results) => {
         if (err) console.log(err);
-        console.log(answers);
+        console.log("Employee Added");
         promptHandler();
       });
     })

@@ -72,4 +72,21 @@ function viewTable(sql) {
   return;
 };
 
+function addDep() {
+  inquirer.prompt([
+    {
+      message: "Enter department name.",
+      name: "name"
+    }
+  ])
+  .then((answers) => {
+    db.query(`INSERT INTO department (name) VALUES (?)`,
+      [answers.name],
+      (err, results) => {
+        promptHandler();
+      })
+  });
+};
+
+
 promptHandler();

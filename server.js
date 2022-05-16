@@ -53,7 +53,7 @@ function promptHandler () {
         updateEmploy();
         break;
       case "Exit":
-        return;
+        db.end();
     }
   });
 };
@@ -88,5 +88,35 @@ function addDep() {
   });
 };
 
+function addRole() {
+  db.query(`SELECT id AS value, name AS name FROM department`, (err, department) => {
+    if (err) console.log(err);
+    inquirer.prompt([
+      {
+        message: "Enter the role.",
+        name: "title"
+      },
+      {
+        message: "Enter salary.",
+        name: "salary"
+      },
+      {
+        message: "Choose the department",
+        type: "list",
+        name: "dep",
+        choices: department
+      },
+    ])
+    .then((answers) => {
+      db.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`,
+      [answers.title, answers.salary, answers.dep],
+      (err, results) => {
+        if (err) console.log(err);
+        console.log(answers);
+        promptHandler();
+      });
+    })
+  });
+};
 
 promptHandler();

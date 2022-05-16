@@ -37,7 +37,7 @@ function promptHandler () {
         viewTable(sql);
         break;
       case "View all employees":
-        sql = `SELECT * FROM employees`;
+        sql = `SELECT employees.*, roles.title AS role_title FROM employees LEFT JOIN roles ON employees.role_id = roles.id`;
         viewTable(sql);
         break;
       case "Add a department":
@@ -149,5 +149,47 @@ function addEmploy() {
     })
   });
 }
+
+function updateEmploy() {
+  var roleResults;
+  db.query(`SELECT id AS value, title AS name FROM roles`, (err, roles) => {
+    if (err) {
+      console.log(err)
+      return;
+    }
+    roleResults = roles;
+  });
+  db.query(`SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees`, (err, employees) => {
+    if (err) console.log(err);
+      inquirer.prompt(
+        [
+          {
+            message: 'Choose the employee',
+            type: 'list',
+            name: 'employees',
+            choices: employees
+          },
+          {
+            message: 'Choose the new role',
+            type: 'list',
+            name: 'role',
+            choices: roleResults
+          },
+        ])
+        .then((answers) => {
+          var employName = answers.employees.split(' ');
+          var employFirstName = employName[0];
+          var employLastName = employName[employName.length - 1];
+
+        db.query('UPDATE employees SET role_id = ? WHERE first_name = ? AND last_name = ?',
+          [answers.role, employFirstName, employLastName],
+          (err, results) => {
+            if (err) console.log(err);
+              console.log(results);
+              promptHandler();
+          });
+        })
+  });
+};
 
 promptHandler();

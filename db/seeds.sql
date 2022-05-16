@@ -1,4 +1,4 @@
-INSERT INTO employee (first_name, last_name)
+INSERT INTO employees (first_name, last_name)
 VALUES
   ('Mike', 'Chan'),
   ('Ashley', 'Rodriguez'),
@@ -7,3 +7,7 @@ VALUES
   ('Malia', 'Brown'),
   ('Sarah', 'Lourd'),
   ('Tom', 'Allen');
+
+INSERT INTO department (name)
+VALUES
+  ('Sales');
